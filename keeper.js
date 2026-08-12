@@ -3,6 +3,7 @@ import fs from 'fs';
 import { createPublicClient, createWalletClient, http, defineChain,
          parseAbiItem, keccak256, encodePacked } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { to6Floor } from './decimals.js';
 
 const arc = defineChain({
   id: 5042002,
@@ -33,7 +34,6 @@ const rules = JSON.parse(fs.readFileSync('./rules.json', 'utf8'));
 // PolicyExecutor moves funds via Permit2, which is the 6dp ERC-20 interface.
 // Every amount crossing this boundary MUST be divided by SCALE. Getting this
 // backwards is a 1e12 error -- the single highest-consequence bug on Arc.
-const SCALE = 1000000000000n; // 1e12
 
 const STATE = './state.json';
 const loadState = () =>
@@ -60,7 +60,9 @@ async function handleTip(log) {
   if (!entry) return;
 
   // net is the creator's share after Tiplyfi's fee; save a percentage of that.
-  const amount = (log.args.net * BigInt(entry.savePct)) / 100n / SCALE;
+  // Floor is intended here: a percentage of a tip rarely lands on a whole 6dp unit,
+  // and sub-cent dust simply stays in the creator's wallet for the next sweep.
+  const amount = to6Floor((log.args.net * BigInt(entry.savePct)) / 100n);
   if (amount === 0n) return;
 
   const cap = BigInt(entry.rule.maxPerExecution);
