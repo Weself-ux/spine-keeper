@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Weself-ux/spine-keeper#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
+    "resend": "^6.19.0",
     "viem": "^2.55.13"
   }
 }

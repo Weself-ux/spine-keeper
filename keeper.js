@@ -4,6 +4,7 @@ import { createPublicClient, createWalletClient, http, defineChain,
          parseAbiItem, keccak256, encodePacked } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { to6Floor } from './decimals.js';
+import { notifyAutoSave } from './notify.js';
 
 const arc = defineChain({
   id: 5042002,
@@ -96,6 +97,15 @@ async function handleTip(log) {
   const rcpt = await pub.waitForTransactionReceipt({ hash });
   console.log(`exec  ${creator} ${amount} status=${rcpt.status} gas=${rcpt.gasUsed}`);
   console.log(`      ${hash}`);
+
+  // Only notify on success. Never let mail failure affect the keeper loop.
+  if (rcpt.status === 'success') {
+    await notifyAutoSave({
+      to: entry.email || process.env.MAIL_TEST_TO,
+      amount6: amount, txHash: hash,
+      vault: entry.rule.subjectId, savePct: entry.savePct,
+    });
+  }
 }
 
 async function poll() {
@@ -106,11 +116,13 @@ async function poll() {
   const state = loadState();
   const head = await pub.getBlockNumber();
   // Arc has deterministic instant finality and no reorgs: no confirmation lag needed.
-  const from = state.lastBlock ? BigInt(state.lastBlock) + 1n : head - 100n;
+  const from = state.lastBlock ? BigInt(state.lastBlock) + 1n : head - 20n;
   if (from > head) return;
 
   // Arc's public RPC rate-limits eth_getLogs. Chunked; dedicated provider before mainnet.
-  const CHUNK = 500n;
+  // Arc's public RPC rejects wide eth_getLogs ranges outright. Tiplyfi's indexer
+  // hit the same wall. A dedicated provider is required before mainnet.
+  const CHUNK = 50n;
   for (let start = from; start <= head; start += CHUNK) {
     const end = (start + CHUNK - 1n) > head ? head : (start + CHUNK - 1n);
     const logs = await pub.getLogs({
