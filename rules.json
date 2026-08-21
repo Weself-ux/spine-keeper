@@ -1,14 +1,15 @@
 {
   "0xbcb1192526afcc7de0171d253761bdfedba12195": {
     "savePct": 10,
-    "ruleHash": "0x71b38962a7522383f7df4552233495d31acf8e9980b36a9ce557d79dae311864",
+    "email": null,
+    "ruleHash": "0x8c60bbeb83fe0a110579c92d8fb8dc3b960ee0ac99c89e23e8071dea4d49bac2",
     "rule": {
       "user": "0xBcB1192526aFCC7De0171D253761BdfEdba12195",
-      "subjectId": "0x1f64b5ac3a4d12f45d7b8cebdb3e3745868da13b4ff6b756583b21bb4a154eff",
-      "factory": "0xB64c4ed4271f07977FAC2Dd86fF78db19A6BC0bA",
+      "subjectId": "0xce393e7f0930d5a4e83630a3e25be4aa1e2de98ef3e33133e32defe8e99016b0",
+      "factory": "0x86CD3841bcE21e588D78F0091f37EA274Df81723",
       "ruleType": 1,
-      "maxPerExecution": 100000,
-      "maxTotal": 1000000,
+      "maxPerExecution": 50000000,
+      "maxTotal": 500000000,
       "expiry": 1789095525,
       "salt": 0
     }

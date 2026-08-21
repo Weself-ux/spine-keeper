@@ -94,6 +94,19 @@
   },
   {
     "type": "function",
+    "name": "allowFactory",
+    "inputs": [
+      {
+        "name": "factory",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "cancelProposal",
     "inputs": [
       {
@@ -102,6 +115,13 @@
         "internalType": "bytes32"
       }
     ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "clearGuardian",
+    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -120,6 +140,25 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "currentPeriod",
+    "inputs": [
+      {
+        "name": "periodSeconds",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
       }
     ],
     "stateMutability": "view"
@@ -146,6 +185,25 @@
         "name": "",
         "type": "uint48",
         "internalType": "uint48"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "etaOf",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -230,6 +288,19 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "guardian",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -384,6 +455,19 @@
     "name": "renounceOwnership",
     "inputs": [],
     "outputs": [],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "revokeFactory",
+    "inputs": [
+      {
+        "name": "factory",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -488,17 +572,12 @@
   },
   {
     "type": "function",
-    "name": "setFactory",
+    "name": "setGuardian",
     "inputs": [
       {
-        "name": "factory",
+        "name": "next",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "allowed",
-        "type": "bool",
-        "internalType": "bool"
       }
     ],
     "outputs": [],
@@ -547,6 +626,11 @@
         "name": "executedTotal",
         "type": "uint88",
         "internalType": "uint88"
+      },
+      {
+        "name": "destination",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -717,6 +801,25 @@
   },
   {
     "type": "event",
+    "name": "GuardianSet",
+    "inputs": [
+      {
+        "name": "previous",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "next",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "KeeperSet",
     "inputs": [
       {
@@ -855,6 +958,12 @@
         "type": "uint64",
         "indexed": false,
         "internalType": "uint64"
+      },
+      {
+        "name": "destination",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
       }
     ],
     "anonymous": false
@@ -913,6 +1022,16 @@
   },
   {
     "type": "error",
+    "name": "BadDestination",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "BadPeriod",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "DailyLimitTooLarge",
     "inputs": []
   },
@@ -958,7 +1077,22 @@
   },
   {
     "type": "error",
+    "name": "NoGuardian",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotAContract",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "NotKeeper",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotOwnerOrGuardian",
     "inputs": []
   },
   {
@@ -1015,6 +1149,11 @@
   },
   {
     "type": "error",
+    "name": "RenounceDisabled",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "Replay",
     "inputs": []
   },
@@ -1048,6 +1187,11 @@
   {
     "type": "error",
     "name": "VelocityExceeded",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAddressNotAllowed",
     "inputs": []
   }
 ]
